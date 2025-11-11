@@ -16,11 +16,17 @@ class Book:
             self.dueDate = date.today() + timedelta(weeks=2)
             self.checkouts += 1
 
-            print("Checkout complete.")
-            print(f"Checkout complete: Title: {self.title} | Due Date: {self.dueDate} | Checkouts: {self.checkouts}")
+            print("\nCheckout complete.")
+            print(f"Title: {self.title} | Due Date: {self.dueDate} | Checkouts: {self.checkouts}")
         else:
-            print(f"Checkout incomplete: Book is already checked out.")
+            print(f"\nCheckout incomplete. Book is already checked out.")
 
     def processReturn(self):
-        self.available = True
-        self.dueDate = None
+        if self.available == False:
+            self.available = True
+            self.dueDate = None
+
+            print("\nReturn complete.")
+            print(f"Title: {self.title} | Due Date: {self.dueDate} | Available: {self.available}")
+        else:
+            print(f"\nReturn incomplete. Book is already available.")
