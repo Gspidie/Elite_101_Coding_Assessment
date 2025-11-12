@@ -1,7 +1,7 @@
 import InventorySystem as IS
 
 def main():
-    print("new7")
+    print("new8")
     IS.menu()
 
 if __name__ == "__main__":
