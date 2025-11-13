@@ -1,5 +1,7 @@
 from datetime import date, timedelta
 
+
+# Description: a custom class with appropiate book properties and meathods.
 class Book:
     def __init__(self, id, title, author, genre, available, dueDate, checkouts):
         self.id = id

@@ -1,45 +1,63 @@
 from Library import library_books as lb
 from datetime import date
 from Book import Book
+import os
 
+# Description: a general function to display and navigate to different program functionallities.
+# Notes: collectChoice() forces the user to select a choice from 1-8. Once inside a if-elif-else block 
+#        the menu() call terminates with a return statement, ending further accidental function continuation.
 def menu():
-    print("Welcome to the Library's Inventory System.")
+    print("\n\n\t     ----- MENU -----")
     print("""
           (1) View books
           (2) Search for a book
           (3) Checkout a book
           (4) Return a book
           (5) View overdue books
-          (6) Modify a book
-          (7) Register a book
+          (6) View popular books 
+          (7) Modify a book
+          (8) Register a book
+          (9) Remove a book
+          (10) Exit
           """)
 
-    choice = collectChoice(8)
+    choice = collectChoice(10)
+
+    os.system('clear')
+
 
     if choice == 1:
-        retrieveAvailable()
+        return retrieveAvailable()
     elif choice == 2:
         query = input("Term to search for: ")
-        searchFor(query)
+        return searchFor(query)
     elif choice == 3:
         id = input("\nID of book for checkout: ").upper()
-        checkoutBookWith(id)
+        return checkoutBookWith(id)
     elif choice == 4:
         id = input("\nID of book for return: ").upper() 
-        returnBookWith(id)
+        return returnBookWith(id)
     elif choice == 5:
-        retrieveOverdue()
+        return retrieveOverdue()
     elif choice == 6:
-        id = input("ID of book for modification: ").upper()
-        modifyBookWith(id)
+        return retrievePopularBooks()
+    elif choice == 7:
+        id = input("\nID of book for modification: ").upper()
+        return modifyBookWith(id)
+    elif choice == 8:
+        return registerBook()
+    elif choice == 9:
+        id = input("\nID of book to remove: ").upper()
+        return removeBookWith(id)
     else:
-        registerBook()
+        return print("Inventory system closed.")
         
 
+
+# Description: a function to print all books or only available books.
 def retrieveAvailable():
+    print("Would you like to view all books or only available books?")
     print("""
-          Would you like to view all books or only available books?
-          
           (1) All books
           (2) Available books
           """)
@@ -58,13 +76,19 @@ def retrieveAvailable():
             if book.available == True:
                 print(f"ID: {book.id} | Title: {book.title} | Author: {book.author}")
 
+
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu()
 
+
+
+# Description: a function to search for a given query in book titles and authors.
 def searchFor(query):
 
     print(f'\nBooks relevant to "{query}": ')
+
 
     for book in lb:
         if query.lower() in book.title.lower() or query.lower() in book.genre.lower():
@@ -72,8 +96,13 @@ def searchFor(query):
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu()
 
+
+
+# Description: a function to checkout a book given the book's ID.
+# Notes: the function uses the Book class processCheckout() meathod to perform the checkout.
 def checkoutBookWith(ID):
     foundBook = False
     index = 0
@@ -95,8 +124,14 @@ def checkoutBookWith(ID):
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu() 
 
+
+
+
+# Description: a function to return a book given the book's ID.
+# Notes: the function uses the Book class processReturn() meathod to perform the return.
 def returnBookWith(ID):
     foundBook = False
     index = 0
@@ -118,8 +153,13 @@ def returnBookWith(ID):
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu()     
 
+
+
+# Description: a function to print all overdue books.
+# Notes: the function uses the Book class dueDate property to determine overdue books.
 def retrieveOverdue():
 
     print("\nCurrent overdue books:")
@@ -130,8 +170,28 @@ def retrieveOverdue():
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
-    return menu()    
+    os.system('clear')
+    return menu()   
 
+
+# Description: a function to print the top three checked out books.
+# Notes: Key and lambda logic refrence: https://stackoverflow.com/questions/76852998/sorting-list-of-custom-class-objects-by-a-property-in-python
+def retrievePopularBooks():
+    descendingSortedLibraryBooks = sorted(lb, key = lambda x: x.checkouts, reverse = True)
+
+    topThreeBooks = descendingSortedLibraryBooks[0:3] 
+
+    print("\nTop Three Books:")
+    for book in topThreeBooks:
+        print(f"ID: {book.id} | Title: {book.title} | Author: {book.author} | Checkouts: {book.checkouts}")
+
+    input("\n\nPress [Enter] to return to the Menu.\n")
+
+    os.system('clear')
+    return menu() 
+
+# Description: a function to register new books into the inventory system.
+# Notes: the functions creates a new instance of the Book class.
 def registerBook():
     print("\nEnter information on the book to register.")
 
@@ -154,8 +214,10 @@ def registerBook():
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu()
 
+# Description: a function to change a book's title, author, or genre.
 def modifyBookWith(ID):
     foundBook = False
     index = 0
@@ -217,15 +279,45 @@ def modifyBookWith(ID):
 
     input("\n\nPress [Enter] to return to the Menu.\n")
 
+    os.system('clear')
     return menu() 
 
+def removeBookWith(ID):
+    foundBook = False
+    index = 0
+
+    for i, book in enumerate(lb):
+        if book.id == ID:
+            foundBook = True
+            index = i
+    
+    if foundBook:
+        removeConfirmed = input(f'Book with ID {ID} found: "{lb[index].title}". Confirm removal (yes/no)? ')
+
+        if removeConfirmed.lower() == "yes":
+            del lb[index]
+
+            print("\nRemoval confirmed.")
+        else:
+            print("\nRemoval not confirmed.")
+    else: 
+        print(f"Book with ID {ID} not found.")
+
+    input("\n\nPress [Enter] to return to the Menu.\n")
+
+    os.system('clear')
+    return menu()     
+
+
+
+# Description: a function to obtain a unique ID from the user.
 def collectUniqueID(): 
     registeredIDs = [book.id for book in lb]
     doesNotHaveUniqueID = True
     ID = ""
     
     while doesNotHaveUniqueID:
-        ID = input("Book ID: ")
+        ID = input("Book ID: ").upper()
 
         if ID in registeredIDs:
             print("\nPlease enter a unique ID.")
@@ -234,6 +326,9 @@ def collectUniqueID():
 
     return ID
 
+
+
+# Description: a general function to obtain a number choice from a given range.
 def collectChoice(numberOfChoices):
     choice = 0
     userDoesNotHaveChoice = True
@@ -251,40 +346,3 @@ def collectChoice(numberOfChoices):
             print("Please enter a integer for you choice.")
     
     return choice
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-def retrievePopularBooks():
-    checkouts = [book.checkouts for book in lb]
-    indicesOfGreatestCheckouts = []
-
-    boooks = [expression for book in lb if book.checkouts == max(checkouts)]
-
-    for book in lb:
-        checkouts.append(book.checkouts)
-
-    while len(indicesOfGreatestCheckouts) < 3:
-        greatestCheckout = max(checkouts) 
-        indicesOfGreatestCheckouts.append(checkouts.index(greatestCheckout))
-        checkouts.remove(greatestCheckout)
-
-    print()
-    for index in indicesOfGreatestCheckouts:
-        print(f"ID: {lb[index].id} | Title: {lb[index].title} | Checkouts: {lb[index].checkouts}")
-
-    input("\n\nPress [Enter] to return to the Menu.\n")
-
-    return menu()
-
-'''
