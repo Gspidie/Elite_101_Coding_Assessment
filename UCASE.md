@@ -3,13 +3,13 @@ A book inventory system for a library.
 
 # C | Clue Detection
 Book class:
-    - ID
-    - Title
-    - Author
-    - Checkouts
-    - Due Date
-    - Available
-    - Genre
+* ID
+* Title
+* Author
+* Checkouts
+* Due Date
+* Available
+* Genre
 
 # A | Assemble
 1) Create a Book.py file to create the Book class
