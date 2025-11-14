@@ -5,6 +5,8 @@ Section: 2H
 
 Published: Nov.12.2025
 
+*Instructions*: To run the program please open the repository in GitHub Codespaces, navigate to the Main.py file, and tap the run button in the top right corner (appropriate Python extension must be installed).
+
 This assingment was completed as part of the Code2College 2025/2026 internship program. 
 
 The program replicates a library's book invetory system. Notable features include: book registration, book deletion, book checkout, book return, and book search. 
